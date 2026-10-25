@@ -1,0 +1,15 @@
+ja:
+  activerecord:
+    models:
+      company: 企業
+    attributes:
+      company:
+        name: 企業名
+        industry: 業種
+        starting_salary: 初任給
+        url: URL
+        description: 説明
+  helpers:
+    submit:
+      create: 登録する
+      update: 更新する

@@ -1,0 +1,21 @@
+<p style="color: green"><%= notice %></p>
+
+<% content_for :title, "Companies" %>
+
+<h1>Companies</h1>
+
+<%= form_with url: companies_path, method: :get do |form| %>
+<%= form.text_field :search, placeholder: "企業名・業種で検索" %>
+<%= form.submit "検索" %>
+<% end %>
+
+<div id="companies">
+  <% @companies.each do |company| %>
+    <%= render company %>
+    <p>
+      <%= link_to "Show this company", company %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New company", new_company_path %>
