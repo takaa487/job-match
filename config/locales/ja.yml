@@ -2,6 +2,7 @@ ja:
   activerecord:
     models:
       company: 企業
+      user: ユーザー
     attributes:
       company:
         name: 企業名
@@ -9,6 +10,14 @@ ja:
         starting_salary: 初任給
         url: URL
         description: 説明
+      user:
+        email: メールアドレス
+        password: パスワード
+        password_confirmation: パスワード(確認)
+        current_password: 現在のパスワード
+  errors:
+    messages:
+      taken: "は既に登録されています"
   helpers:
     submit:
       create: 登録する

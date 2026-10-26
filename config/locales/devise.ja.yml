@@ -1,0 +1,22 @@
+ja:
+  devise:
+    failure:
+      already_authenticated: "すでにログインしています。"
+      invalid: "%{authentication_keys}またはパスワードが違います。"
+      not_found_in_database: "%{authentication_keys}またはパスワードが違います。"
+      timeout: "セッションの有効期限が切れました。もう一度ログインしてください。"
+      unauthenticated: "ログインまたはアカウント登録してください。"
+    registrations:
+      signed_up: "アカウント登録が完了しました。"
+      destroyed: "アカウントを削除しました。"
+      updated: "アカウント情報を変更しました。"
+    sessions:
+      signed_in: "ログインしました。"
+      signed_out: "ログアウトしました。"
+      already_signed_out: "すでにログアウトしています。"
+    passwords:
+      updated: "パスワードを変更しました。"
+      send_instructions: "パスワード再設定の案内をメールで送りました。"
+  errors:
+    messages:
+      not_saved: "エラーが発生したため保存できませんでした。"

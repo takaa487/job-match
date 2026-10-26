@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  root "companies#index"
+  devise_for :users
     resources :companies do
     member do
       post :generate_es

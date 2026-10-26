@@ -12,27 +12,35 @@
 
     <%= yield :head %>
 
-    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
-    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
-
     <link rel="icon" href="/icon.png" type="image/png">
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
 
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
   <body>
-      <body>
     <nav class="navbar navbar-dark bg-dark mb-4">
       <div class="container">
-        <a class="navbar-brand" href="/companies">Job Match</a>
+        <a class="navbar-brand" href="/">Job Match</a>
+        <div>
+          <% if user_signed_in? %>
+            <span class="navbar-text me-2"><%= current_user.email %></span>
+            <%= button_to "ログアウト", destroy_user_session_path, method: :delete, class: "btn btn-outline-light btn-sm", form: { class: "d-inline" } %>
+                    <% else %>
+            <%= link_to "ログイン", new_user_session_path, class: "btn btn-outline-light btn-sm me-2" %>
+            <%= link_to "新規登録", new_user_registration_path, class: "btn btn-light btn-sm" %>
+          <% end %>
+        </div>
       </div>
     </nav>
 
     <div class="container">
+      <% if alert %>
+        <div class="alert alert-warning"><%= alert %></div>
+      <% end %>
+
       <%= yield %>
     </div>
 

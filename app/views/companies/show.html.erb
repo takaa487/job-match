@@ -15,10 +15,12 @@
   </div>
 </div>
 
-<div class="mb-4">
-  <%= link_to "編集", edit_company_path(@company), class: "btn btn-outline-primary btn-sm" %>
-  <%= button_to "削除", @company, method: :delete, class: "btn btn-outline-danger btn-sm", form: { class: "d-inline" }, data: { turbo_confirm: "この企業を削除しますか？" } %>
-</div>
+<% if current_user&.admin? %>
+  <div class="mb-4">
+    <%= link_to "編集", edit_company_path(@company), class: "btn btn-outline-primary btn-sm" %>
+    <%= button_to "削除", @company, method: :delete, class: "btn btn-outline-danger btn-sm", form: { class: "d-inline" }, data: { turbo_confirm: "この企業を削除しますか？" } %>
+  </div>
+<% end %>
 
 <div class="card border-primary">
   <div class="card-body">

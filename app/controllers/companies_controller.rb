@@ -1,14 +1,12 @@
 class CompaniesController < ApplicationController
   before_action :set_company, only: %i[ show edit update destroy ]
+  before_action :require_admin, only: [:new, :create, :edit, :update, :destroy]
 
   # GET /companies or /companies.json
-   def index
-    # まず全企業を取ってくる（検索してないときは、これが一覧に出る）
+  def index
     @companies = Company.all
 
-    # 検索ボックスに文字が入力されていたら、絞り込みを実行する
     if params[:search].present?
-      # 名前 or 業種に、入力された文字を「含む」企業だけに絞る（% は「含む」の意味）
       @companies = @companies.where("name LIKE ? OR industry LIKE ?", "%#{params[:search]}%", "%#{params[:search]}%")
     end
   end
@@ -16,6 +14,7 @@ class CompaniesController < ApplicationController
   # GET /companies/1 or /companies/1.json
   def show
   end
+
   def generate_es
     @company = Company.find(params[:id])
 
@@ -37,6 +36,7 @@ class CompaniesController < ApplicationController
     @es = Claude.generate(prompt)
     render :show
   end
+
   # GET /companies/new
   def new
     @company = Company.new
@@ -85,12 +85,15 @@ class CompaniesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
+
+    def require_admin
+      redirect_to companies_path, alert: "権限がありません" unless current_user&.admin?
+    end
+
     def set_company
       @company = Company.find(params.expect(:id))
     end
 
-    # Only allow a list of trusted parameters through.
     def company_params
       params.expect(company: [ :name, :industry, :starting_salary, :url, :description ])
     end
