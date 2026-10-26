@@ -16,7 +16,27 @@ class CompaniesController < ApplicationController
   # GET /companies/1 or /companies/1.json
   def show
   end
+  def generate_es
+    @company = Company.find(params[:id])
 
+    prompt = <<~PROMPT
+      あなたは就活のES作成を手伝うアシスタントです。
+      以下の企業に応募する学生のために、志望動機の下書きを作成してください。
+
+      【企業情報】
+      企業名: #{@company.name}
+      業種: #{@company.industry}
+      特徴: #{@company.description}
+
+      【応募者の情報】
+      #{params[:user_info]}
+
+      上記をもとに、この企業への志望動機を300字程度で、応募者本人の言葉として自然に書いてください。
+    PROMPT
+
+    @es = Claude.generate(prompt)
+    render :show
+  end
   # GET /companies/new
   def new
     @company = Company.new

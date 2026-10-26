@@ -1,21 +1,35 @@
-<p style="color: green"><%= notice %></p>
 
-<% content_for :title, "Companies" %>
+<% content_for :title, "企業一覧" %>
 
-<h1>Companies</h1>
-
-<%= form_with url: companies_path, method: :get do |form| %>
-<%= form.text_field :search, placeholder: "企業名・業種で検索" %>
-<%= form.submit "検索" %>
+<% if notice.present? %>
+  <div class="alert alert-success"><%= notice %></div>
 <% end %>
 
-<div id="companies">
-  <% @companies.each do |company| %>
-    <%= render company %>
-    <p>
-      <%= link_to "Show this company", company %>
-    </p>
-  <% end %>
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1>企業一覧</h1>
+  <%= link_to "＋ 新規企業", new_company_path, class: "btn btn-success" %>
 </div>
 
-<%= link_to "New company", new_company_path %>
+<%= form_with url: companies_path, method: :get, class: "row g-2 mb-4" do |form| %>
+  <div class="col-auto">
+    <%= form.text_field :search, placeholder: "企業名・業種で検索", class: "form-control" %>
+  </div>
+  <div class="col-auto">
+    <%= form.submit "検索", class: "btn btn-primary" %>
+  </div>
+<% end %>
+
+<div class="row">
+  <% @companies.each do |company| %>
+    <div class="col-md-6 mb-3">
+      <div class="card h-100">
+        <div class="card-body">
+          <h5 class="card-title"><%= company.name %></h5>
+          <h6 class="card-subtitle mb-2 text-muted"><%= company.industry %></h6>
+          <p class="card-text"><%= company.description %></p>
+          <%= link_to "詳細・ES作成", company, class: "btn btn-primary btn-sm" %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

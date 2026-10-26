@@ -1,9 +1,8 @@
 <%= form_with(model: company, data: { turbo: false }) do |form| %>
   <% if company.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(company.errors.count, "error") %> prohibited this company from being saved:</h2>
-
-      <ul>
+    <div class="alert alert-danger">
+      <h2 class="h6"><%= pluralize(company.errors.count, "個のエラー") %>で保存できませんでした:</h2>
+      <ul class="mb-0">
         <% company.errors.each do |error| %>
           <li><%= error.full_message %></li>
         <% end %>
@@ -11,32 +10,32 @@
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :name, style: "display: block" %>
-    <%= form.text_field :name %>
+  <div class="mb-3">
+    <%= form.label :name, class: "form-label" %>
+    <%= form.text_field :name, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :industry, class: "form-label" %>
+    <%= form.text_field :industry, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :starting_salary, class: "form-label" %>
+    <%= form.text_field :starting_salary, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :url, class: "form-label" %>
+    <%= form.text_field :url, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :description, class: "form-label" %>
+    <%= form.text_area :description, rows: 4, class: "form-control" %>
   </div>
 
   <div>
-    <%= form.label :industry, style: "display: block" %>
-    <%= form.text_field :industry %>
-  </div>
-
-  <div>
-    <%= form.label :starting_salary, style: "display: block" %>
-    <%= form.number_field :starting_salary %>
-  </div>
-
-  <div>
-    <%= form.label :url, style: "display: block" %>
-    <%= form.text_field :url %>
-  </div>
-
-  <div>
-    <%= form.label :description, style: "display: block" %>
-    <%= form.textarea :description %>
-  </div>
-
-  <div>
-    <%= form.submit %>
+    <%= form.submit class: "btn btn-primary" %>
   </div>
 <% end %>

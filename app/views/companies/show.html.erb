@@ -1,10 +1,41 @@
-<p style="color: green"><%= notice %></p>
+<% content_for :title, @company.name %>
 
-<%= render @company %>
+<% if notice.present? %>
+  <div class="alert alert-success"><%= notice %></div>
+<% end %>
 
-<div>
-  <%= link_to "Edit this company", edit_company_path(@company) %> |
-  <%= link_to "Back to companies", companies_path %>
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1><%= @company.name %></h1>
+  <%= link_to "← 一覧に戻る", companies_path, class: "btn btn-outline-secondary btn-sm" %>
+</div>
 
-  <%= button_to "Destroy this company", @company, method: :delete %>
+<div class="card mb-3">
+  <div class="card-body">
+    <%= render @company %>
+  </div>
+</div>
+
+<div class="mb-4">
+  <%= link_to "編集", edit_company_path(@company), class: "btn btn-outline-primary btn-sm" %>
+  <%= button_to "削除", @company, method: :delete, class: "btn btn-outline-danger btn-sm", form: { class: "d-inline" }, data: { turbo_confirm: "この企業を削除しますか？" } %>
+</div>
+
+<div class="card border-primary">
+  <div class="card-body">
+    <h2 class="h5 mb-3">この企業向けのES下書きを作る</h2>
+    <%= form_with url: generate_es_company_path(@company), method: :post, data: { turbo: false } do |form| %>
+      <div class="mb-3">
+        <%= form.label :user_info, "あなたの情報（強み・経験・やりたいことなど）", class: "form-label" %>
+        <%= form.text_area :user_info, rows: 6, class: "form-control" %>
+      </div>
+      <%= form.submit "ES下書きを生成", class: "btn btn-primary" %>
+    <% end %>
+
+    <% if @es.present? %>
+      <h3 class="h6 mt-4">生成されたES下書き</h3>
+      <div class="border rounded p-3 mt-2 bg-light" style="white-space: pre-wrap;">
+        <%= @es %>
+      </div>
+    <% end %>
+  </div>
 </div>
