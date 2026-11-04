@@ -1,0 +1,48 @@
+<div class="container py-4" style="max-width: 720px;">
+  <h1 class="h3 mb-2">就活タイプ診断</h1>
+  <p class="text-muted mb-4">全<%= @questions.size %>問。深く考えすぎず、直感で答えてください。</p>
+
+  <%= form_with url: diagnoses_path, method: :post do %>
+    <% @questions.each_with_index do |question, index| %>
+      <div class="card mb-3 question-card">
+        <div class="card-body">
+          <p class="fw-bold mb-3">Q<%= index + 1 %>. <%= question[:text] %></p>
+          <div class="likert">
+            <div class="likert-circles">
+              <% Diagnosis::CHOICES.each do |choice| %>
+                <% input_id = "q#{question[:id]}_#{choice[:value]}" %>
+                <%= radio_button_tag "answers[#{question[:id]}]", choice[:value], false, id: input_id, class: "likert-input", required: true %>
+                <%= label_tag input_id, class: "likert-circle likert-v#{choice[:value]}", title: choice[:label] do %>
+                  <span class="visually-hidden"><%= choice[:label] %></span>
+                <% end %>
+              <% end %>
+            </div>
+            <div class="likert-ends">
+              <span>そう思う</span>
+              <span>そう思わない</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
+    <div class="d-grid mb-5">
+      <%= submit_tag "結果を見る", id: "diagnosis-submit", class: "btn btn-primary btn-lg" %>
+    </div>
+  <% end %>
+</div>
+
+<script>
+  // 答えたら、次の質問まで自動でスクロールする
+  document.querySelectorAll(".question-card").forEach((card, index, cards) => {
+    card.addEventListener("change", () => {
+      // 答え直しの時は動かさない（初めて答えた時だけ次へ進む）
+      if (card.classList.contains("answered")) return;
+      card.classList.add("answered");
+
+      // 次の質問へ。最後の質問なら「結果を見る」ボタンへ
+      const next = cards[index + 1] || document.getElementById("diagnosis-submit");
+      next.scrollIntoView({ behavior: "smooth", block: "center" });
+    });
+  });
+</script>

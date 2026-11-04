@@ -1,4 +1,5 @@
 class CompaniesController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_company, only: %i[ show edit update destroy ]
   before_action :require_admin, only: [:new, :create, :edit, :update, :destroy]
 
@@ -8,6 +9,28 @@ class CompaniesController < ApplicationController
 
     if params[:search].present?
       @companies = @companies.where("name LIKE ? OR industry LIKE ?", "%#{params[:search]}%", "%#{params[:search]}%")
+    end
+  end
+
+  # GET /companies/filter
+  def filter
+    @industries = Company.distinct.pluck(:industry).compact.sort
+    @areas = Area.order(:position)
+    # 診断結果の「この業界の企業を見る」から来た時は、タイプの記号（例: AMPW）が付いてくる
+    @type_code = params[:type].to_s
+    @from_type = Diagnosis::TYPES[@type_code]
+    @searched = params[:searched].present? || params[:industries].present? || params[:min_salary].present? || params[:areas].present?
+    return unless @searched
+
+    @companies = Company.all
+    if params[:industries].present?
+      @companies = @companies.where(industry: params[:industries])
+    end
+    if params[:min_salary].present?
+      @companies = @companies.where("starting_salary >= ?", params[:min_salary])
+    end
+    if params[:areas].present?
+      @companies = @companies.joins(:areas).where(areas: { name: params[:areas] }).distinct
     end
   end
 
@@ -85,15 +108,17 @@ class CompaniesController < ApplicationController
   end
 
   private
-
+    # 管理者以外は、企業の登録・編集・削除をできないようにする
     def require_admin
       redirect_to companies_path, alert: "権限がありません" unless current_user&.admin?
     end
 
+    # Use callbacks to share common setup or constraints between actions.
     def set_company
       @company = Company.find(params.expect(:id))
     end
 
+    # Only allow a list of trusted parameters through.
     def company_params
       params.expect(company: [ :name, :industry, :starting_salary, :url, :description ])
     end

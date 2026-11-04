@@ -10,7 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_26_083155) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_03_230912) do
+  create_table "areas", force: :cascade do |t|
+    t.string "name"
+    t.integer "position"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_areas_on_name", unique: true
+  end
+
   create_table "companies", force: :cascade do |t|
     t.string "name"
     t.string "industry"
@@ -19,6 +27,27 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_26_083155) do
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "work_location"
+  end
+
+  create_table "company_areas", force: :cascade do |t|
+    t.integer "company_id", null: false
+    t.integer "area_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["area_id"], name: "index_company_areas_on_area_id"
+    t.index ["company_id", "area_id"], name: "index_company_areas_on_company_id_and_area_id", unique: true
+    t.index ["company_id"], name: "index_company_areas_on_company_id"
+  end
+
+  create_table "es_drafts", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "company_id", null: false
+    t.text "content"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["company_id"], name: "index_es_drafts_on_company_id"
+    t.index ["user_id"], name: "index_es_drafts_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -33,4 +62,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_26_083155) do
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
+
+  add_foreign_key "company_areas", "areas"
+  add_foreign_key "company_areas", "companies"
+  add_foreign_key "es_drafts", "companies"
+  add_foreign_key "es_drafts", "users"
 end

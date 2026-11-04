@@ -1,0 +1,134 @@
+<% salary_options = [["指定しない", ""], ["25万円以上", "250000"], ["28万円以上", "280000"], ["30万円以上", "300000"], ["33万円以上", "330000"], ["35万円以上", "350000"], ["40万円以上", "400000"]] %>
+
+<div class="container py-4" style="max-width: 900px;">
+  <h1 class="h3 mb-4">条件で企業を絞り込む</h1>
+
+  <% if @from_type %>
+    <div class="card mb-3">
+      <div class="card-body d-flex flex-wrap justify-content-between align-items-center gap-2">
+        <div>
+          <div class="small text-secondary">診断結果から</div>
+          <div class="fw-bold">「<%= @from_type[:name] %>」タイプに向いている業界（<%= Array(params[:industries]).join("・") %>）の企業です</div>
+        </div>
+        <%= link_to "診断結果に戻る", diagnosis_path(@type_code), class: "btn btn-outline-primary btn-sm" %>
+      </div>
+    </div>
+    <button class="btn btn-outline-primary mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#filterForm" aria-expanded="false" aria-controls="filterForm">勤務地や初任給でも絞り込む</button>
+  <% end %>
+
+  <div class="collapse <%= "show" unless @from_type %>" id="filterForm">
+    <%= form_with url: filter_companies_path, method: :get do %>
+      <%= hidden_field_tag :searched, "1", id: nil %>
+      <div class="card mb-4">
+        <div class="card-body">
+          <div class="row py-3 border-bottom">
+            <div class="col-md-3 fw-bold mb-2 mb-md-0">業界</div>
+            <div class="col-md-9">
+              <div class="form-check form-check-inline">
+                <input type="checkbox" class="form-check-input" id="industry_none" data-none-for="industries" <%= "checked" if Array(params[:industries]).empty? %>>
+                <label class="form-check-label" for="industry_none">指定しない</label>
+              </div>
+              <% @industries.each_with_index do |industry, index| %>
+                <div class="form-check form-check-inline">
+                  <%= check_box_tag "industries[]", industry, Array(params[:industries]).include?(industry), id: "industry_#{index}", class: "form-check-input" %>
+                  <%= label_tag "industry_#{index}", industry, class: "form-check-label" %>
+                </div>
+              <% end %>
+            </div>
+          </div>
+
+          <div class="row py-3 border-bottom">
+            <div class="col-md-3 fw-bold mb-2 mb-md-0">勤務地</div>
+            <div class="col-md-9">
+              <div class="form-check form-check-inline">
+                <input type="checkbox" class="form-check-input" id="area_none" data-none-for="areas" <%= "checked" if Array(params[:areas]).empty? %>>
+                <label class="form-check-label" for="area_none">指定しない</label>
+              </div>
+              <% @areas.each do |area| %>
+                <div class="form-check form-check-inline">
+                  <%= check_box_tag "areas[]", area.name, Array(params[:areas]).include?(area.name), id: "area_#{area.id}", class: "form-check-input" %>
+                  <%= label_tag "area_#{area.id}", area.name, class: "form-check-label" %>
+                </div>
+              <% end %>
+              <div class="small text-muted mt-1">いくつか選ぶと、選んだどれかの地方で働く可能性がある会社が出ます。</div>
+            </div>
+          </div>
+
+          <div class="row py-3">
+            <div class="col-md-3 fw-bold mb-2 mb-md-0">初任給（月給）</div>
+            <div class="col-md-9">
+              <%= select_tag :min_salary, options_for_select(salary_options, params[:min_salary]), class: "form-select", style: "max-width: 240px;" %>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer bg-white text-end">
+          <%= submit_tag "この条件で探す", name: nil, class: "btn btn-primary" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <% if @searched %>
+    <p class="fw-bold mb-3"><%= @companies.count %>件ヒット</p>
+
+    <% @companies.each do |company| %>
+      <div class="card mb-2">
+        <div class="card-body d-flex justify-content-between align-items-center gap-3">
+          <div>
+            <%= link_to company.name, company_path(company), class: "fw-bold text-decoration-none" %>
+            <div class="small text-muted"><%= company.industry %></div>
+            <div class="small mt-1">勤務地：<%= work_location_text(company) %></div>
+          </div>
+          <div class="text-end text-nowrap">
+            <div class="small text-muted">初任給（月給）</div>
+            <div class="fw-bold"><%= salary_text(company) %></div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
+    <p class="small text-muted mt-3">初任給は各社の採用ページに載っている学部卒の月給です。年度・コース・含まれる手当（固定残業代など）は会社ごとに違うので、企業ページで確認してください。勤務地も各社の募集要項などをもとにした2026年11月時点の情報で、変わることがあります。</p>
+
+    <% if params[:industries].present? %>
+      <div class="card mt-4">
+        <div class="card-body">
+          <h2 class="h6">AIでもっと探す</h2>
+          <p class="small text-muted">選んだ条件のまま、ここに載っていない会社をAIがWeb検索で5社まで探します。30秒〜1分ほどかかります。</p>
+          <%= form_with url: company_searches_path, method: :post, data: { turbo: false }, html: { onsubmit: "const button = this.querySelector('[type=submit]'); button.disabled = true; button.value = 'AIが探しています…（30秒〜1分）';" } do %>
+            <% Array(params[:industries]).each do |industry| %>
+              <%= hidden_field_tag "industries[]", industry, id: nil %>
+            <% end %>
+            <% Array(params[:areas]).each do |area| %>
+              <%= hidden_field_tag "areas[]", area, id: nil %>
+            <% end %>
+            <%= hidden_field_tag :min_salary, params[:min_salary], id: nil %>
+            <%= submit_tag "AIでもっと探す", name: nil, class: "btn btn-outline-primary" %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  <% else %>
+    <p class="text-muted">条件を選んで「この条件で探す」を押すと、ここに企業が出ます。全部「指定しない」のまま押すと、すべての企業が出ます。</p>
+  <% end %>
+</div>
+
+<script>
+  // 「指定しない」と、ほかのチェックが同時に付かないようにする
+  document.querySelectorAll("[data-none-for]").forEach((noneBox) => {
+    const items = document.querySelectorAll(`input[name="${noneBox.dataset.noneFor}[]"]`);
+
+    noneBox.addEventListener("change", () => {
+      if (noneBox.checked) {
+        items.forEach((item) => { item.checked = false; });
+      } else if (![...items].some((item) => item.checked)) {
+        noneBox.checked = true;
+      }
+    });
+
+    items.forEach((item) => {
+      item.addEventListener("change", () => {
+        noneBox.checked = ![...items].some((other) => other.checked);
+      });
+    });
+  });
+</script>

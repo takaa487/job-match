@@ -1,0 +1,41 @@
+<div class="container py-4" style="max-width: 720px;">
+  <div class="card shadow-sm mb-4">
+    <div class="card-body text-center py-5">
+      <p class="text-muted mb-1">あなたの就活タイプは</p>
+      <h1 class="display-6 fw-bold mb-1"><%= @type[:name] %></h1>
+      <p class="text-muted small mb-3"><%= @code %></p>
+      <p class="mb-4"><%= @type[:description] %></p>
+      <div class="d-flex flex-wrap justify-content-center gap-2">
+        <% @axis_labels.each do |label| %>
+          <span class="badge rounded-pill text-bg-light border fs-6 fw-normal"><%= label %></span>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <div class="card mb-4">
+    <div class="card-body">
+      <h2 class="h5 mb-3">向いている業界</h2>
+      <% if user_signed_in? %>
+        <p class="small text-muted">「<%= @axis_labels.join("・") %>」の傾向が活きやすい業界です。</p>
+        <% @type[:industries].each do |industry| %>
+          <div class="d-flex justify-content-between align-items-center border rounded p-3 mb-2">
+            <span class="fw-bold"><%= industry %></span>
+            <%= link_to "この業界の企業を見る", filter_companies_path(industries: [industry], type: @code), class: "btn btn-outline-primary btn-sm" %>
+          </div>
+        <% end %>
+        <p class="small text-muted mt-3 mb-0">診断は自己分析のきっかけです。結果だけで決めず、気になる業界は実際に調べてみてください。</p>
+      <% else %>
+        <p class="mb-3">登録すると、あなたに向いている業界と、その業界の企業が見られます。</p>
+        <div class="d-flex flex-wrap gap-2">
+          <%= link_to "登録して見る", new_user_registration_path, class: "btn btn-primary" %>
+          <%= link_to "ログイン", new_user_session_path, class: "btn btn-outline-secondary" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="text-center">
+    <%= link_to "もう一度診断する", new_diagnosis_path, class: "btn btn-link" %>
+  </div>
+</div>

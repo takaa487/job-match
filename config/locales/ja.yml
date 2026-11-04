@@ -7,7 +7,7 @@ ja:
       company:
         name: 企業名
         industry: 業種
-        starting_salary: 初任給
+        starting_salary: 初任給（月給・円）
         url: URL
         description: 説明
       user:

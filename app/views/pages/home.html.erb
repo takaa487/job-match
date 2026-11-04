@@ -1,0 +1,41 @@
+<div class="mx-auto py-4" style="max-width: 640px;">
+  <div class="text-center py-4">
+    <p class="fw-bold text-secondary mb-2">就活タイプ診断</p>
+    <h1 class="fw-bold mb-3">あなたは、どの就活タイプ？</h1>
+    <p class="text-secondary mb-4"><%= @questions_count %>問に答えると、16タイプの中からあなたのタイプがわかります。</p>
+    <%= link_to "診断をはじめる", new_diagnosis_path, class: "btn btn-primary btn-lg px-5" %>
+    <p class="small text-secondary mt-3 mb-0">登録なしでOK・結果はURLで友だちに送れます</p>
+  </div>
+
+  <div class="card mb-3">
+    <div class="card-body p-4 text-center">
+      <p class="small fw-bold text-secondary mb-3">こんなタイプがあります</p>
+      <div class="d-flex flex-wrap justify-content-center gap-2">
+        <% @sample_types.each do |type| %>
+          <span class="type-chip"><%= type[:name] %></span>
+        <% end %>
+        <span class="type-chip type-chip-more">ほか<%= @other_types_count %>タイプ</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-body p-4">
+      <h2 class="h6 fw-bold mb-3">診断のあと、登録するとできること</h2>
+      <ol class="list-unstyled mb-0">
+        <li class="d-flex align-items-center gap-3 mb-3">
+          <span class="step-num">1</span>
+          <span>向いている業界がわかる</span>
+        </li>
+        <li class="d-flex align-items-center gap-3 mb-3">
+          <span class="step-num">2</span>
+          <span>待遇や勤務地などの条件から、その業界の企業を探せる</span>
+        </li>
+        <li class="d-flex align-items-center gap-3">
+          <span class="step-num">3</span>
+          <span>ES下書きを、AIが手伝ってくれる</span>
+        </li>
+      </ol>
+    </div>
+  </div>
+</div>

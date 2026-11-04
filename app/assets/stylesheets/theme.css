@@ -1,0 +1,144 @@
+/* ===== 全体の見た目（デザイン案B：診断らしいポップ） ===== */
+/* Bootstrap が使っている色や形の設定（変数）を、上から書き換える */
+:root {
+  --bs-body-color: #2A2140;                    /* 文字：こい紫がかった黒 */
+  --bs-body-font-family: "M PLUS Rounded 1c", sans-serif;
+  --bs-secondary-color: #5E5873;               /* text-muted などの、うすい文字 */
+  --bs-link-color: #5B4BC4;                    /* リンク：紫 */
+  --bs-link-color-rgb: 91, 75, 196;
+  --bs-link-hover-color: #463A9E;
+  --bs-link-hover-color-rgb: 70, 58, 158;
+}
+
+/* ページの背景：うすい紫（カードや入力欄は白のまま） */
+body {
+  background-color: #F3F1FF;
+}
+
+/* 見出しは太く */
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+  font-weight: 800;
+}
+
+/* ボタンは全部まるく、文字は太く */
+.btn {
+  --bs-btn-border-radius: 999px;
+  --bs-btn-font-weight: 700;
+}
+
+/* 一番押してほしいボタン（btn-primary）：朱色 */
+.btn-primary {
+  --bs-btn-bg: #C93F1C;
+  --bs-btn-border-color: #C93F1C;
+  --bs-btn-hover-bg: #A93417;
+  --bs-btn-hover-border-color: #A93417;
+  --bs-btn-active-bg: #A93417;
+  --bs-btn-active-border-color: #A93417;
+  --bs-btn-disabled-bg: #C93F1C;
+  --bs-btn-disabled-border-color: #C93F1C;
+  --bs-btn-focus-shadow-rgb: 201, 63, 28;
+}
+
+/* 次に押してほしいボタン（btn-outline-primary）：紫のふち */
+.btn-outline-primary {
+  --bs-btn-color: #5B4BC4;
+  --bs-btn-border-color: #5B4BC4;
+  --bs-btn-hover-color: #FFFFFF;
+  --bs-btn-hover-bg: #5B4BC4;
+  --bs-btn-hover-border-color: #5B4BC4;
+  --bs-btn-active-color: #FFFFFF;
+  --bs-btn-active-bg: #463A9E;
+  --bs-btn-active-border-color: #463A9E;
+  --bs-btn-focus-shadow-rgb: 91, 75, 196;
+}
+
+/* カード：ふちの線なし、白、角を大きく丸く */
+.card {
+  --bs-card-border-width: 0;
+  --bs-card-border-radius: 24px;
+  --bs-card-inner-border-radius: 24px;
+  --bs-card-cap-bg: transparent;
+}
+
+/* 入力欄とプルダウン：角を丸く、選んでいる時は紫 */
+.form-control,
+.form-select {
+  border-radius: 14px;
+  border-color: #D9D4EE;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: #5B4BC4;
+  box-shadow: 0 0 0 0.25rem rgba(91, 75, 196, 0.2);
+}
+
+.form-check-input:checked {
+  background-color: #5B4BC4;
+  border-color: #5B4BC4;
+}
+
+/* お知らせの枠も角を丸く */
+.alert {
+  border-radius: 16px;
+}
+
+/* ===== 上のメニュー（ナビバー） ===== */
+.app-navbar {
+  padding-top: 14px;
+  padding-bottom: 14px;
+}
+
+.app-brand {
+  font-weight: 800;
+  color: var(--bs-body-color);
+}
+
+.app-navbar .nav-link {
+  font-weight: 700;
+  color: #5B4BC4;
+}
+
+.app-navbar .nav-link:hover {
+  color: #463A9E;
+}
+
+/* スマホでメニューを開いた時は、白いカードの中に並べる */
+@media (max-width: 767.98px) {
+  .app-navbar .navbar-collapse {
+    margin-top: 12px;
+    padding: 12px 16px;
+    background: #FFFFFF;
+    border-radius: 20px;
+  }
+}
+/* トップページ：タイプ名の札と、1〜3の番号 */
+.type-chip {
+  display: inline-block;
+  padding: .45rem .9rem;
+  border-radius: 999px;
+  background-color: #ECE8FF;
+  color: #5B4BC4;
+  font-weight: 700;
+  font-size: .9rem;
+}
+
+.type-chip-more {
+  background-color: transparent;
+  border: 1px dashed #B9B0E8;
+  color: #5E5873;
+}
+
+.step-num {
+  flex-shrink: 0;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background-color: #C93F1C;
+  color: #fff;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

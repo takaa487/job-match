@@ -1,10 +1,8 @@
 <div id="<%= dom_id company %>">
   <p><strong>企業名:</strong> <%= company.name %></p>
   <p><strong>業種:</strong> <%= company.industry %></p>
-  <p><strong>初任給:</strong> <%= company.starting_salary %></p>
+  <p><strong>初任給（月給）:</strong> <%= salary_text(company) %></p>
+  <p><strong>勤務地:</strong> <%= work_location_text(company) %></p>
   <p><strong>URL:</strong> <%= company.url %></p>
   <p><strong>説明:</strong> <%= company.description %></p>
-</div>
- 
-
 </div>

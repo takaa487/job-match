@@ -33,11 +33,21 @@
       <%= form.submit "ES下書きを生成", class: "btn btn-primary" %>
     <% end %>
 
-    <% if @es.present? %>
+        <% if @es.present? %>
       <h3 class="h6 mt-4">生成されたES下書き</h3>
       <div class="border rounded p-3 mt-2 bg-light" style="white-space: pre-wrap;">
         <%= @es %>
       </div>
+
+      <% if user_signed_in? %>
+        <%= form_with url: es_drafts_path, method: :post do |f| %>
+          <%= f.hidden_field :company_id, value: @company.id %>
+          <%= f.hidden_field :content, value: @es %>
+          <%= f.submit "このESを保存", class: "btn btn-outline-primary btn-sm mt-2" %>
+        <% end %>
+      <% else %>
+        <p class="text-muted mt-2"><small><%= link_to "ログイン", new_user_session_path %>すると、このESを保存できます</small></p>
+      <% end %>
     <% end %>
   </div>
 </div>

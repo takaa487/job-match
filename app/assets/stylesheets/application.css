@@ -8,3 +8,81 @@
  *
  * Consider organizing styles into separate files for maintainability.
  */
+/* ===== 就活タイプ診断：答えの丸ボタン ===== */
+/* 丸5つと、下の「そう思う／そう思わない」をまとめる枠 */
+.likert {
+  max-width: 340px;
+  margin: 0 auto;
+}
+
+/* 丸を横一列に、端から端まで均等に並べる */
+.likert-circles {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* 本物のラジオボタンは見えなくする（消すと required のチェックが効かないので透明にするだけ） */
+.likert-input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* 丸ボタン（ラベル）の共通の見た目 */
+.likert-circle {
+  border: 3px solid;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.15s, transform 0.15s;
+}
+
+.likert-circle:hover {
+  transform: scale(1.08);
+}
+
+/* 大きさ：両端ほど大きく、真ん中が一番小さい */
+.likert-v2, .likert-v-2 { width: 52px; height: 52px; }
+.likert-v1, .likert-v-1 { width: 40px; height: 40px; }
+.likert-v0 { width: 30px; height: 30px; }
+
+/* 枠の色：そう思う側は青、どちらでもないは灰色、そう思わない側はオレンジ */
+.likert-v2, .likert-v1 { border-color: #0d6efd; }
+.likert-v0 { border-color: #adb5bd; }
+.likert-v-1, .likert-v-2 { border-color: #fd7e14; }
+
+/* 選ばれた丸を塗りつぶす */
+.likert-input:checked + .likert-v2,
+.likert-input:checked + .likert-v1 { background-color: #0d6efd; }
+.likert-input:checked + .likert-v0 { background-color: #adb5bd; }
+.likert-input:checked + .likert-v-1,
+.likert-input:checked + .likert-v-2 { background-color: #fd7e14; }
+
+/* キーボード（Tabと矢印キー）で操作している時に、今どこかが分かるように */
+.likert-input:focus-visible + .likert-circle {
+  outline: 3px solid rgba(13, 110, 253, 0.4);
+  outline-offset: 3px;
+}
+
+/* 丸の下の「そう思う」「そう思わない」 */
+.likert-ends {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  font-size: 0.8rem;
+  color: #6c757d;
+}
+
+/* 答えた質問は少し薄くして、今の質問を目立たせる */
+.question-card {
+  transition: opacity 0.2s;
+}
+
+.question-card.answered {
+  opacity: 0.55;
+}
+
+.question-card.answered:hover {
+  opacity: 1;
+}
