@@ -1,37 +1,45 @@
 <div class="container my-4" style="max-width: 760px;">
   <h1 class="h3 mb-2">企業名からES下書きを作る</h1>
-  <p class="text-muted mb-4">登録されていない企業でも、AIがWebで調べてから志望動機の下書きを作ります。30秒ほどかかります。</p>
 
-  <%= form_with url: es_generations_path, method: :post, data: { turbo: false },
-        html: { onsubmit: "const b = this.querySelector('input[type=submit]'); b.disabled = true; b.value = '調べています…（30秒ほど）';" } do |f| %>
-    <div class="mb-3">
-      <%= f.label :company_name, "企業名", class: "form-label" %>
-      <%= f.text_field :company_name, value: @company_name, class: "form-control", placeholder: "例：アマゾンジャパン", maxlength: 50 %>
-    </div>
-    <div class="mb-3">
-      <%= f.label :user_info, "自分の情報（経験・強み・興味など）", class: "form-label" %>
-      <%= f.text_area :user_info, value: @user_info, class: "form-control", rows: 6, maxlength: 1000 %>
-    </div>
-    <%= f.submit "AIで調べてES下書きを作る", class: "btn btn-primary" %>
-  <% end %>
+  <% if ai_available? %>
+    <p class="text-muted mb-4">登録されていない企業でも、AIがWebで調べてから志望動機の下書きを作ります。30秒ほどかかります。</p>
 
-  <% if @result %>
-    <div class="card mt-4">
-      <div class="card-body">
-        <h2 class="h5">ES下書き（<%= @company_name %>）</h2>
-        <p style="white-space: pre-wrap;"><%= @result[:text] %></p>
-
-        <% if @result[:sources].any? %>
-          <h3 class="h6 mt-3">参考にしたページ</h3>
-          <ul class="small">
-            <% @result[:sources].each do |source| %>
-              <li><%= link_to source[:title], source[:url], target: "_blank", rel: "noopener" %></li>
-            <% end %>
-          </ul>
-        <% end %>
-
-        <p class="text-muted small mb-0">AIがWebで調べた内容をもとにした下書きです。事実と違うところがないか、必ず自分で確認してください。</p>
+    <%= form_with url: es_generations_path, method: :post, data: { turbo: false },
+          html: { onsubmit: "const b = this.querySelector('input[type=submit]'); b.disabled = true; b.value = '調べています…（30秒ほど）';" } do |f| %>
+      <div class="mb-3">
+        <%= f.label :company_name, "企業名", class: "form-label" %>
+        <%= f.text_field :company_name, value: @company_name, class: "form-control", placeholder: "例：アマゾンジャパン", maxlength: 50 %>
       </div>
+      <div class="mb-3">
+        <%= f.label :user_info, "自分の情報（経験・強み・興味など）", class: "form-label" %>
+        <%= f.text_area :user_info, value: @user_info, class: "form-control", rows: 6, maxlength: 1000 %>
+      </div>
+      <%= f.submit "AIで調べてES下書きを作る", class: "btn btn-primary" %>
+    <% end %>
+
+    <% if @result %>
+      <div class="card mt-4">
+        <div class="card-body">
+          <h2 class="h5">ES下書き（<%= @company_name %>）</h2>
+          <p style="white-space: pre-wrap;"><%= @result[:text] %></p>
+
+          <% if @result[:sources].any? %>
+            <h3 class="h6 mt-3">参考にしたページ</h3>
+            <ul class="small">
+              <% @result[:sources].each do |source| %>
+                <li><%= link_to source[:title], source[:url], target: "_blank", rel: "noopener" %></li>
+              <% end %>
+            </ul>
+          <% end %>
+
+          <p class="text-muted small mb-0">AIがWebで調べた内容をもとにした下書きです。事実と違うところがないか、必ず自分で確認してください。</p>
+        </div>
+      </div>
+    <% end %>
+  <% else %>
+    <p class="text-muted mb-4">登録されていない企業でも、AIがWebで調べてから志望動機の下書きを作る機能です。</p>
+    <div class="card">
+      <div class="card-body text-muted">AIの機能は準備中です。使えるようになるまで、もう少しお待ちください。</div>
     </div>
   <% end %>
 </div>

@@ -25,29 +25,34 @@
 <div class="card border-primary">
   <div class="card-body">
     <h2 class="h5 mb-3">この企業向けのES下書きを作る</h2>
-    <%= form_with url: generate_es_company_path(@company), method: :post, data: { turbo: false } do |form| %>
-      <div class="mb-3">
-        <%= form.label :user_info, "あなたの情報（強み・経験・やりたいことなど）", class: "form-label" %>
-        <%= form.text_area :user_info, rows: 6, class: "form-control" %>
-      </div>
-      <%= form.submit "ES下書きを生成", class: "btn btn-primary" %>
-    <% end %>
 
-        <% if @es.present? %>
-      <h3 class="h6 mt-4">生成されたES下書き</h3>
-      <div class="border rounded p-3 mt-2 bg-light" style="white-space: pre-wrap;">
-        <%= @es %>
-      </div>
-
-      <% if user_signed_in? %>
-        <%= form_with url: es_drafts_path, method: :post do |f| %>
-          <%= f.hidden_field :company_id, value: @company.id %>
-          <%= f.hidden_field :content, value: @es %>
-          <%= f.submit "このESを保存", class: "btn btn-outline-primary btn-sm mt-2" %>
-        <% end %>
-      <% else %>
-        <p class="text-muted mt-2"><small><%= link_to "ログイン", new_user_session_path %>すると、このESを保存できます</small></p>
+    <% if ai_available? %>
+      <%= form_with url: generate_es_company_path(@company), method: :post, data: { turbo: false } do |form| %>
+        <div class="mb-3">
+          <%= form.label :user_info, "あなたの情報（強み・経験・やりたいことなど）", class: "form-label" %>
+          <%= form.text_area :user_info, rows: 6, class: "form-control" %>
+        </div>
+        <%= form.submit "ES下書きを生成", class: "btn btn-primary" %>
       <% end %>
+
+      <% if @es.present? %>
+        <h3 class="h6 mt-4">生成されたES下書き</h3>
+        <div class="border rounded p-3 mt-2 bg-light" style="white-space: pre-wrap;">
+          <%= @es %>
+        </div>
+
+        <% if user_signed_in? %>
+          <%= form_with url: es_drafts_path, method: :post do |f| %>
+            <%= f.hidden_field :company_id, value: @company.id %>
+            <%= f.hidden_field :content, value: @es %>
+            <%= f.submit "このESを保存", class: "btn btn-outline-primary btn-sm mt-2" %>
+          <% end %>
+        <% else %>
+          <p class="text-muted mt-2"><small><%= link_to "ログイン", new_user_session_path %>すると、このESを保存できます</small></p>
+        <% end %>
+      <% end %>
+    <% else %>
+      <p class="text-muted mb-0">AIの機能は準備中です。使えるようになるまで、もう少しお待ちください。</p>
     <% end %>
   </div>
 </div>

@@ -1,8 +1,9 @@
 class EsGenerationsController < ApplicationController
   before_action :authenticate_user!
+  before_action :require_ai, only: [:create]
 
   # 入力フォームを出すだけ
-    def new
+  def new
     @company_name = params[:company_name].to_s.strip.first(50)
   end
 

@@ -1,6 +1,7 @@
 # DBに無い会社を、AIにWeb検索で探してもらう（結果はDBに保存しない）
 class CompanySearchesController < ApplicationController
   before_action :authenticate_user!
+  before_action :require_ai
 
   # 地方ごとに、どの都道府県が入るか（AIに地方の範囲をまちがえさせないため）
   AREA_PREFECTURES = {

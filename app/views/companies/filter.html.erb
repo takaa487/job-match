@@ -93,16 +93,20 @@
       <div class="card mt-4">
         <div class="card-body">
           <h2 class="h6">AIでもっと探す</h2>
-          <p class="small text-muted">選んだ条件のまま、ここに載っていない会社をAIがWeb検索で5社まで探します。30秒〜1分ほどかかります。</p>
-          <%= form_with url: company_searches_path, method: :post, data: { turbo: false }, html: { onsubmit: "const button = this.querySelector('[type=submit]'); button.disabled = true; button.value = 'AIが探しています…（30秒〜1分）';" } do %>
-            <% Array(params[:industries]).each do |industry| %>
-              <%= hidden_field_tag "industries[]", industry, id: nil %>
+          <% if ai_available? %>
+            <p class="small text-muted">選んだ条件のまま、ここに載っていない会社をAIがWeb検索で5社まで探します。30秒〜1分ほどかかります。</p>
+            <%= form_with url: company_searches_path, method: :post, data: { turbo: false }, html: { onsubmit: "const button = this.querySelector('[type=submit]'); button.disabled = true; button.value = 'AIが探しています…（30秒〜1分）';" } do %>
+              <% Array(params[:industries]).each do |industry| %>
+                <%= hidden_field_tag "industries[]", industry, id: nil %>
+              <% end %>
+              <% Array(params[:areas]).each do |area| %>
+                <%= hidden_field_tag "areas[]", area, id: nil %>
+              <% end %>
+              <%= hidden_field_tag :min_salary, params[:min_salary], id: nil %>
+              <%= submit_tag "AIでもっと探す", name: nil, class: "btn btn-outline-primary" %>
             <% end %>
-            <% Array(params[:areas]).each do |area| %>
-              <%= hidden_field_tag "areas[]", area, id: nil %>
-            <% end %>
-            <%= hidden_field_tag :min_salary, params[:min_salary], id: nil %>
-            <%= submit_tag "AIでもっと探す", name: nil, class: "btn btn-outline-primary" %>
+          <% else %>
+            <p class="small text-muted mb-0">ここに載っていない会社を、AIがWeb検索で探す機能です。AIの機能は準備中です。</p>
           <% end %>
         </div>
       </div>
