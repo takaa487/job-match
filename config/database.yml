@@ -1,8 +1,7 @@
-# SQLite. Versions 3.8.0 and up are supported.
-#   gem install sqlite3
-#
-#   Ensure the SQLite 3 gem is defined in your Gemfile
-#   gem "sqlite3"
+# 開発（development）とテスト（test）は SQLite を使う。
+# 本番（production）の主なデータ（primary）は PostgreSQL（Neon）を使い、接続先は環境変数 DATABASE_URL で渡す。
+# 本番のキャッシュ・ジョブ・ActionCable用（cache / queue / cable）は、サーバーの中の SQLite のまま。
+#   （一時的なデータなので、デプロイで消えても困らない）
 #
 default: &default
   adapter: sqlite3
@@ -20,12 +19,12 @@ test:
   <<: *default
   database: storage/test.sqlite3
 
-# Store production database in the storage/ directory, which by default
-# is mounted as a persistent Docker volume in config/deploy.yml.
 production:
   primary:
-    <<: *default
-    database: storage/production.sqlite3
+    adapter: postgresql
+    encoding: unicode
+    max_connections: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+    url: <%= ENV["DATABASE_URL"] %>
   cache:
     <<: *default
     database: storage/production_cache.sqlite3
