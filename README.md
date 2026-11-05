@@ -1,24 +1,52 @@
-# README
+# 就活タイプ診断
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+就活生向けのタイプ診断と、診断結果から業界・企業を絞り込めるWebアプリです。
 
-Things you may want to cover:
+公開URL: https://job-match-gva5.onrender.com
+（無料プランのため、しばらく使われていないと最初の表示に時間がかかります）
 
-* Ruby version
+## 作ったきっかけ
 
-* System dependencies
+大学の友達が「業種すら決まらない」と話していたのがきっかけです。話を聞くと、希望の給料や勤務地は決まっている人もいれば、何から考えればいいか分からない人もいて、状況は人によって違いました。
+そこで、状況の違う人がそれぞれ使えるように作りました。
 
-* Configuration
+## できること
 
-* Database creation
+- 登録なしで就活タイプ診断を受けられる
+- 診断結果から、向いている業界の企業一覧へそのまま進める
+- 企業を業界・初任給・勤務地（全国6地域）で絞り込める
+- AIでESの下書きを作り、ログインして保存できる（Claude API。公開版は準備中）
+- AIで条件に合う企業を探せる（公開版は準備中）
 
-* Database initialization
+## 使っている技術
 
-* How to run the test suite
+| 分類 | 技術 |
+| --- | --- |
+| 言語・フレームワーク | Ruby 3.4 / Ruby on Rails 8.1 |
+| 画面 | ERB、Bootstrap 5、Turbo |
+| ログイン | Devise |
+| データベース | PostgreSQL（本番・Neon）、SQLite（開発） |
+| AI | Claude API |
+| 公開 | Render |
+| 開発環境 | GitHub Codespaces |
 
-* Services (job queues, cache servers, search engines, etc.)
+## 作るときに決めたこと
 
-* Deployment instructions
+- ログインが必要だと使ってもらえないので、診断は登録なしで受けられるようにした
+- 勤務地は、都道府県ではなく全国6地域で絞り込むようにした
+- APIキーがないときはAIの機能を止めて「準備中」と表示するようにした（公開した時点でAPIの利用枠がなかったため）
 
-* ...
+## 開発の進め方
+
+AI（Claude）に作りたいものを伝えてコードを書いてもらい、動かして思いどおりになるまで直してもらいながら作りました。
+
+## 手元で動かす方法
+
+```bash
+bundle install
+bin/rails db:prepare
+bin/rails db:seed
+bin/rails server
+```
+
+AIの機能を使うときは、`.env` に `ANTHROPIC_API_KEY` を入れます（このファイルはGitHubに上げません）。
