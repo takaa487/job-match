@@ -6,6 +6,6 @@ class CreateCompanyAreas < ActiveRecord::Migration[8.1]
 
       t.timestamps
     end
-    add_index :company_areas, [:company_id, :area_id], unique: true
+    add_index :company_areas, [ :company_id, :area_id ], unique: true
   end
 end

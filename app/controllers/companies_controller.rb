@@ -1,8 +1,8 @@
 class CompaniesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_company, only: %i[ show edit update destroy ]
-  before_action :require_admin, only: [:new, :create, :edit, :update, :destroy]
-  before_action :require_ai, only: [:generate_es]
+  before_action :require_admin, only: [ :new, :create, :edit, :update, :destroy ]
+  before_action :require_ai, only: [ :generate_es ]
 
   # GET /companies or /companies.json
   def index
