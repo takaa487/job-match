@@ -1,11 +1,9 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+user_draft:
+  user: user
+  company: tech
+  content: 一般の利用者が保存したES
 
-one:
-  user: one
-  company: one
-  content: MyText
-
-two:
-  user: two
-  company: two
-  content: MyText
+admin_draft:
+  user: admin
+  company: bank
+  content: 管理者が保存したES

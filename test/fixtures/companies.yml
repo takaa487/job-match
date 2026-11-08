@@ -1,15 +1,15 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+tech:
+  name: サンプルソフト
+  industry: ソフトウェア・通信
+  starting_salary: 300000
+  url: https://example.com/tech
+  description: 会社向けのソフトウェアをつくる会社
+  work_location: 本社：東京
 
-one:
-  name: MyString
-  industry: MyString
-  starting_salary: 1
-  url: MyString
-  description: MyText
-
-two:
-  name: MyString
-  industry: MyString
-  starting_salary: 1
-  url: MyString
-  description: MyText
+bank:
+  name: サンプル銀行
+  industry: 金融
+  starting_salary: 250000
+  url: https://example.com/bank
+  description: 地域の銀行
+  work_location: 本店：大阪
