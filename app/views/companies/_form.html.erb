@@ -1,7 +1,7 @@
 <%= form_with(model: company, data: { turbo: false }) do |form| %>
   <% if company.errors.any? %>
     <div class="alert alert-danger">
-      <h2 class="h6"><%= pluralize(company.errors.count, "個のエラー") %>で保存できませんでした:</h2>
+      <h2 class="h6">保存できませんでした。次の点を直してください。</h2>
       <ul class="mb-0">
         <% company.errors.each do |error| %>
           <li><%= error.full_message %></li>
@@ -22,12 +22,17 @@
 
   <div class="mb-3">
     <%= form.label :starting_salary, class: "form-label" %>
-    <%= form.text_field :starting_salary, class: "form-control" %>
+    <%= form.number_field :starting_salary, min: 0, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :work_location, class: "form-label" %>
+    <%= form.text_field :work_location, class: "form-control" %>
   </div>
 
   <div class="mb-3">
     <%= form.label :url, class: "form-label" %>
-    <%= form.text_field :url, class: "form-control" %>
+    <%= form.url_field :url, class: "form-control" %>
   </div>
 
   <div class="mb-3">

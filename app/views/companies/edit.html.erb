@@ -1,12 +1,5 @@
-<% content_for :title, "Editing company" %>
+<% content_for :title, "企業の情報を編集する" %>
 
-<h1>Editing company</h1>
+<h1 class="mb-4">企業の情報を編集する</h1>
 
 <%= render "form", company: @company %>
-
-<br>
-
-<div>
-  <%= link_to "Show this company", @company %> |
-  <%= link_to "Back to companies", companies_path %>
-</div>

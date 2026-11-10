@@ -8,6 +8,7 @@ ja:
         name: 企業名
         industry: 業種
         starting_salary: 初任給（月給・円）
+        work_location: 勤務地
         url: URL
         description: 説明
       user:

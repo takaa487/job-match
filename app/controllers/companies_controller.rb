@@ -1,10 +1,9 @@
 class CompaniesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_company, only: %i[ show edit update destroy ]
-  before_action :require_admin, only: [ :new, :create, :edit, :update, :destroy ]
-  before_action :require_ai, only: [ :generate_es ]
+  before_action :require_admin, only: %i[ new create edit update destroy ]
+  before_action :require_ai, only: %i[ generate_es ]
 
-  # GET /companies or /companies.json
   def index
     @companies = Company.all
 
@@ -13,7 +12,6 @@ class CompaniesController < ApplicationController
     end
   end
 
-  # GET /companies/filter
   def filter
     @industries = Company.distinct.pluck(:industry).compact.sort
     @areas = Area.order(:position)
@@ -35,7 +33,6 @@ class CompaniesController < ApplicationController
     end
   end
 
-  # GET /companies/1 or /companies/1.json
   def show
   end
 
@@ -61,66 +58,48 @@ class CompaniesController < ApplicationController
     render :show
   end
 
-  # GET /companies/new
   def new
     @company = Company.new
   end
 
-  # GET /companies/1/edit
   def edit
   end
 
-  # POST /companies or /companies.json
   def create
     @company = Company.new(company_params)
 
-    respond_to do |format|
-      if @company.save
-        format.html { redirect_to @company, notice: "Company was successfully created." }
-        format.json { render :show, status: :created, location: @company }
-      else
-        format.html { render :new, status: :unprocessable_content }
-        format.json { render json: @company.errors, status: :unprocessable_content }
-      end
+    if @company.save
+      redirect_to @company, notice: "企業を登録しました"
+    else
+      render :new, status: :unprocessable_content
     end
   end
 
-  # PATCH/PUT /companies/1 or /companies/1.json
   def update
-    respond_to do |format|
-      if @company.update(company_params)
-        format.html { redirect_to @company, notice: "Company was successfully updated.", status: :see_other }
-        format.json { render :show, status: :ok, location: @company }
-      else
-        format.html { render :edit, status: :unprocessable_content }
-        format.json { render json: @company.errors, status: :unprocessable_content }
-      end
+    if @company.update(company_params)
+      redirect_to @company, notice: "企業の情報を更新しました", status: :see_other
+    else
+      render :edit, status: :unprocessable_content
     end
   end
 
-  # DELETE /companies/1 or /companies/1.json
   def destroy
     @company.destroy!
-
-    respond_to do |format|
-      format.html { redirect_to companies_path, notice: "Company was successfully destroyed.", status: :see_other }
-      format.json { head :no_content }
-    end
+    redirect_to companies_path, notice: "企業を削除しました", status: :see_other
   end
 
   private
-    # 管理者以外は、企業の登録・編集・削除をできないようにする
-    def require_admin
-      redirect_to companies_path, alert: "権限がありません" unless current_user&.admin?
-    end
 
-    # Use callbacks to share common setup or constraints between actions.
-    def set_company
-      @company = Company.find(params.expect(:id))
-    end
+  # 管理者以外は、企業の登録・編集・削除をできないようにする
+  def require_admin
+    redirect_to companies_path, alert: "権限がありません" unless current_user&.admin?
+  end
 
-    # Only allow a list of trusted parameters through.
-    def company_params
-      params.expect(company: [ :name, :industry, :starting_salary, :url, :description ])
-    end
+  def set_company
+    @company = Company.find(params.expect(:id))
+  end
+
+  def company_params
+    params.expect(company: [ :name, :industry, :starting_salary, :work_location, :url, :description ])
+  end
 end

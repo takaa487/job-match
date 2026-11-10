@@ -62,4 +62,13 @@ class CompaniesControllerTest < ActionDispatch::IntegrationTest
     end
     assert_redirected_to company_url(Company.find_by!(name: "新しい会社"))
   end
+
+  test "管理者は、勤務地も含めて企業の情報を更新できる" do
+    sign_in users(:admin)
+
+    patch company_url(companies(:tech)), params: { company: { work_location: "本社：横浜" } }
+
+    assert_redirected_to company_url(companies(:tech))
+    assert_equal "本社：横浜", companies(:tech).reload.work_location
+  end
 end
