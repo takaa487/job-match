@@ -5,11 +5,7 @@ class CompaniesController < ApplicationController
   before_action :require_ai, only: %i[ generate_es ]
 
   def index
-    @companies = Company.all
-
-    if params[:search].present?
-      @companies = @companies.where("name LIKE ? OR industry LIKE ?", "%#{params[:search]}%", "%#{params[:search]}%")
-    end
+    @companies = Company.search(params[:search])
   end
 
   def filter
@@ -18,19 +14,11 @@ class CompaniesController < ApplicationController
     # 診断結果の「この業界の企業を見る」から来た時は、タイプの記号（例: AMPW）が付いてくる
     @type_code = params[:type].to_s
     @from_type = Diagnosis::TYPES[@type_code]
-    @searched = params[:searched].present? || params[:industries].present? || params[:min_salary].present? || params[:areas].present?
+    # 何も選ばずに「絞り込む」を押したときも、全部の企業を結果として出すため、searched も見る
+    @searched = params.values_at(:searched, :industries, :min_salary, :areas).any?(&:present?)
     return unless @searched
 
-    @companies = Company.all
-    if params[:industries].present?
-      @companies = @companies.where(industry: params[:industries])
-    end
-    if params[:min_salary].present?
-      @companies = @companies.where("starting_salary >= ?", params[:min_salary])
-    end
-    if params[:areas].present?
-      @companies = @companies.joins(:areas).where(areas: { name: params[:areas] }).distinct
-    end
+    @companies = Company.in_industries(params[:industries]).with_salary_at_least(params[:min_salary]).in_areas(params[:areas])
   end
 
   def show

@@ -2,6 +2,10 @@ tech_kanto:
   company: tech
   area: kanto
 
+tech_kinki:
+  company: tech
+  area: kinki
+
 bank_kinki:
   company: bank
   area: kinki
