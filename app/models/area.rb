@@ -3,4 +3,5 @@ class Area < ApplicationRecord
   has_many :companies, through: :company_areas
 
   validates :name, presence: true, uniqueness: true
+  validates :position, presence: true
 end

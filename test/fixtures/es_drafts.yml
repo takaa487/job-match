@@ -1,9 +1,11 @@
 user_draft:
   user: user
   company: tech
+  company_name: サンプルソフト
   content: 一般の利用者が保存したES
 
 admin_draft:
   user: admin
   company: bank
+  company_name: サンプル銀行
   content: 管理者が保存したES
