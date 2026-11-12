@@ -1,6 +1,13 @@
 class EsGenerationsController < ApplicationController
   before_action :authenticate_user!
-  before_action :require_ai, only: [ :create ]
+  before_action :require_ai, only: %i[ create ]
+
+  # 失敗しても入力した内容が消えないように、元の画面に戻すのではなく、同じ画面を出し直す
+  rescue_from Claude::Error do |error|
+    log_ai_failure(error)
+    flash.now[:alert] = AI_FAILED_MESSAGE
+    render :new, status: :service_unavailable
+  end
 
   # 入力フォームを出すだけ
   def new

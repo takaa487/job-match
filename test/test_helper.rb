@@ -1,6 +1,7 @@
 ENV["RAILS_ENV"] ||= "test"
 require_relative "../config/environment"
 require "rails/test_help"
+require "minitest/mock"
 
 # .env の APIキーを消して、テストで本物のAIを呼ばない（お金がかからず、CI と同じ条件になる）ようにするため
 ENV.delete("ANTHROPIC_API_KEY")
@@ -9,6 +10,14 @@ module ActiveSupport
   class TestCase
     parallelize(workers: :number_of_processors)
     fixtures :all
+
+    # AI を使う画面を、APIキーがある状態で動かすため。AI の返事は stub で差しかえるので、本物の AI は呼ばない
+    def with_ai_key
+      ENV["ANTHROPIC_API_KEY"] = "test-key"
+      yield
+    ensure
+      ENV.delete("ANTHROPIC_API_KEY")
+    end
   end
 end
 

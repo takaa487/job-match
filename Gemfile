@@ -57,6 +57,9 @@ group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
   gem "selenium-webdriver"
+
+  # テストで、AI などの外とのやりとりを、にせものの返事に差しかえる（stub）ため。Minitest 6 から別の gem になった
+  gem "minitest-mock", require: false
 end
 
 group :production do
