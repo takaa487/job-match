@@ -9,7 +9,7 @@ class CompaniesController < ApplicationController
   end
 
   def filter
-    @industries = Company.distinct.pluck(:industry).compact.sort
+    @industries = Company::INDUSTRIES
     @areas = Area.order(:position)
     # 診断結果の「この業界の企業を見る」から来た時は、タイプの記号（例: AMPW）が付いてくる
     @type_code = params[:type].to_s

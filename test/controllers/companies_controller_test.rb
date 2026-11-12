@@ -71,4 +71,21 @@ class CompaniesControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to company_url(companies(:tech))
     assert_equal "本社：横浜", companies(:tech).reload.work_location
   end
+
+  test "登録の画面では、業界を8つの中から選ぶ" do
+    sign_in users(:admin)
+
+    get new_company_url
+
+    assert_select "select#company_industry option", 9
+  end
+
+  test "管理者が企業を消しても、利用者が保存した ES は残る" do
+    sign_in users(:admin)
+
+    assert_no_difference -> { EsDraft.count } do
+      delete company_url(companies(:tech))
+    end
+    assert_redirected_to companies_url
+  end
 end

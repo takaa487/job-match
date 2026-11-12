@@ -25,4 +25,29 @@ class EsDraftsControllerTest < ActionDispatch::IntegrationTest
     end
     assert_response :not_found
   end
+
+  test "企業のページで作ったESを、企業名と一緒に保存する" do
+    assert_difference -> { EsDraft.count }, 1 do
+      post es_drafts_url, params: { company_id: companies(:bank).id, content: "銀行への志望動機" }
+    end
+    assert_redirected_to company_url(companies(:bank))
+    assert_equal "サンプル銀行", EsDraft.find_by!(content: "銀行への志望動機").company_name
+  end
+
+  test "本文が空のESは保存しない" do
+    assert_no_difference -> { EsDraft.count } do
+      post es_drafts_url, params: { company_id: companies(:bank).id, content: "" }
+    end
+    assert_redirected_to company_url(companies(:bank))
+    assert_equal "ESを保存できませんでした", flash[:alert]
+  end
+
+  test "企業が消されたあとも、保存したESは企業名つきで一覧に出る" do
+    companies(:tech).destroy
+
+    get es_drafts_url
+
+    assert_includes response.body, "サンプルソフト"
+    assert_includes response.body, es_drafts(:user_draft).content
+  end
 end

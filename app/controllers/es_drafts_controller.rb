@@ -1,4 +1,3 @@
-
 class EsDraftsController < ApplicationController
   before_action :authenticate_user!
 
@@ -7,13 +6,18 @@ class EsDraftsController < ApplicationController
   end
 
   def create
-    current_user.es_drafts.create(company_id: params[:company_id], content: params[:content])
-    redirect_to company_path(params[:company_id]), notice: "ESを保存しました"
+    company = Company.find(params.expect(:company_id))
+    es_draft = current_user.es_drafts.build(company: company, content: params[:content])
+
+    if es_draft.save
+      redirect_to company, notice: "ESを保存しました"
+    else
+      redirect_to company, alert: "ESを保存できませんでした"
+    end
   end
 
   def destroy
-    es_draft = current_user.es_drafts.find(params[:id])
-    es_draft.destroy
-    redirect_to es_drafts_path, notice: "ESを削除しました"
+    current_user.es_drafts.find(params.expect(:id)).destroy!
+    redirect_to es_drafts_path, notice: "ESを削除しました", status: :see_other
   end
 end

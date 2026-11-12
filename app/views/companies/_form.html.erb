@@ -17,7 +17,7 @@
 
   <div class="mb-3">
     <%= form.label :industry, class: "form-label" %>
-    <%= form.text_field :industry, class: "form-control" %>
+    <%= form.select :industry, Company::INDUSTRIES, { include_blank: "選んでください" }, class: "form-select" %>
   </div>
 
   <div class="mb-3">
