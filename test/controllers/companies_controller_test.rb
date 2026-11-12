@@ -7,6 +7,25 @@ class CompaniesControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to new_user_session_url
   end
 
+  test "検索する前は、企業を出さない" do
+    sign_in users(:user)
+
+    get companies_url
+
+    assert_response :success
+    assert_not_includes response.body, companies(:tech).name
+    assert_not_includes response.body, companies(:bank).name
+  end
+
+  test "何も入れずに検索すると、すべての企業を出す" do
+    sign_in users(:user)
+
+    get companies_url, params: { search: "" }
+
+    assert_includes response.body, companies(:tech).name
+    assert_includes response.body, companies(:bank).name
+  end
+
   test "企業名か業界の言葉で検索できる" do
     sign_in users(:user)
 
@@ -43,6 +62,7 @@ class CompaniesControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, companies(:tech).name
     assert_not_includes response.body, companies(:bank).name
   end
+
   test "企業のページから、企業名を入れた状態でES作成の画面へ移れる" do
     sign_in users(:user)
 
@@ -50,6 +70,7 @@ class CompaniesControllerTest < ActionDispatch::IntegrationTest
 
     assert_select "a[href=?]", new_es_generation_path(company_name: "サンプルソフト")
   end
+
   test "管理者でなければ、企業を登録できない" do
     sign_in users(:user)
 

@@ -1,7 +1,7 @@
-<% content_for :title, "企業一覧" %>
+<% content_for :title, "企業を探す" %>
 
 <div class="d-flex justify-content-between align-items-center mb-3">
-  <h1>企業一覧</h1>
+  <h1>企業を探す</h1>
   <% if current_user&.admin? %>
     <%= link_to "＋ 新規企業", new_company_path, class: "btn btn-success" %>
   <% end %>
@@ -9,7 +9,7 @@
 
 <%= form_with url: companies_path, method: :get, class: "row g-2 mb-4" do |form| %>
   <div class="col-auto">
-    <%= form.text_field :search, placeholder: "企業名・業種で検索", class: "form-control" %>
+    <%= form.text_field :search, value: params[:search], placeholder: "企業名・業種で検索", class: "form-control" %>
   </div>
   <div class="col-auto">
     <%= form.submit "検索", class: "btn btn-primary" %>
@@ -19,17 +19,23 @@
   </div>
 <% end %>
 
-<div class="row">
-  <% @companies.each do |company| %>
-    <div class="col-md-6 mb-3">
-      <div class="card h-100">
-        <div class="card-body">
-          <h5 class="card-title"><%= company.name %></h5>
-          <h6 class="card-subtitle mb-2 text-muted"><%= company.industry %></h6>
-          <p class="card-text"><%= company.description %></p>
-          <%= link_to "詳細・ES作成", company, class: "btn btn-primary btn-sm" %>
+<% if @companies %>
+  <p class="fw-bold mb-3"><%= @companies.count %>件ヒット</p>
+
+  <div class="row">
+    <% @companies.each do |company| %>
+      <div class="col-md-6 mb-3">
+        <div class="card h-100">
+          <div class="card-body">
+            <h5 class="card-title"><%= company.name %></h5>
+            <h6 class="card-subtitle mb-2 text-muted"><%= company.industry %></h6>
+            <p class="card-text"><%= company.description %></p>
+            <%= link_to "詳細・ES作成", company, class: "btn btn-primary btn-sm" %>
+          </div>
         </div>
       </div>
-    </div>
-  <% end %>
-</div>
+    <% end %>
+  </div>
+<% else %>
+  <p class="text-muted">企業名や業種を入れて「検索」を押すと、ここに企業が出ます。何も入れずに押すと、すべての企業が出ます。</p>
+<% end %>

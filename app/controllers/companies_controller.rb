@@ -3,9 +3,9 @@ class CompaniesController < ApplicationController
   before_action :set_company, only: %i[ show edit update destroy ]
   before_action :require_admin, only: %i[ new create edit update destroy ]
 
-
   def index
-    @companies = Company.search(params[:search])
+    # 検索するまでは企業を出さない（絞り込みのページと同じ）。何も入れずに検索したときは、すべて出す
+    @companies = Company.search(params[:search]) if params.key?(:search)
   end
 
   def filter
