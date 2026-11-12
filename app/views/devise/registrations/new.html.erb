@@ -1,5 +1,5 @@
 <div class="row justify-content-center">
-  <div class="col-md-5">
+  <div class="col-md-5" data-controller="password-visibility">
     <h2 class="mb-4">新規登録</h2>
 
     <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
@@ -15,13 +15,15 @@
         <% if @minimum_password_length %>
           <small class="text-muted">(<%= @minimum_password_length %>文字以上)</small>
         <% end %>
-        <%= f.password_field :password, autocomplete: "new-password", class: "form-control" %>
+        <%= f.password_field :password, autocomplete: "new-password", class: "form-control", data: { password_visibility_target: "field" } %>
       </div>
 
       <div class="mb-3">
         <%= f.label :password_confirmation, "パスワード(確認)", class: "form-label" %>
-        <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control" %>
+        <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control", data: { password_visibility_target: "field" } %>
       </div>
+
+      <%= render "devise/shared/show_password" %>
 
       <%= f.submit "登録する", class: "btn btn-primary w-100" %>
     <% end %>

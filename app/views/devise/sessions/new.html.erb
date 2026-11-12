@@ -1,5 +1,5 @@
 <div class="row justify-content-center">
-  <div class="col-md-5">
+  <div class="col-md-5" data-controller="password-visibility">
     <h2 class="mb-4">ログイン</h2>
 
     <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
@@ -10,8 +10,10 @@
 
       <div class="mb-3">
         <%= f.label :password, "パスワード", class: "form-label" %>
-        <%= f.password_field :password, autocomplete: "current-password", class: "form-control" %>
+        <%= f.password_field :password, autocomplete: "current-password", class: "form-control", data: { password_visibility_target: "field" } %>
       </div>
+
+      <%= render "devise/shared/show_password" %>
 
       <% if devise_mapping.rememberable? %>
         <div class="form-check mb-3">
