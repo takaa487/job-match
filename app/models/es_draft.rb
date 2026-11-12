@@ -1,16 +1,16 @@
 class EsDraft < ApplicationRecord
   belongs_to :user
-  # 企業が消されても ES は残すので、企業のない ES もある
+  # 登録されていない企業の ES や、企業が消されたあとの ES もあるので、企業のない ES も許す
   belongs_to :company, optional: true
 
-  before_validation :copy_company_name, on: :create
+  before_validation :link_registered_company, on: :create
 
   validates :company_name, :content, presence: true
 
   private
 
-  # 企業が消されたり名前が変わったりしても、どの企業向けの ES だったか分かるように、保存した時点の企業名を写しておく
-  def copy_company_name
-    self.company_name ||= company&.name
+  # 登録済みの企業の ES なら、一覧から企業のページへ移れるように、企業ともつないでおく
+  def link_registered_company
+    self.company ||= Company.find_by(name: company_name)
   end
 end

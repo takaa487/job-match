@@ -50,6 +50,8 @@ class EsGenerationsController < ApplicationController
     PROMPT
 
     @result = Claude.generate_with_search(prompt)
+    # 「このESを保存」のボタンで送る中身
+    @es_draft = EsDraft.new(company_name: @company_name, content: @result[:text])
     render :new
   end
 end

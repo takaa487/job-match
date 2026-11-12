@@ -1,13 +1,8 @@
-
 <% content_for :title, "企業一覧" %>
-
-<% if notice.present? %>
-  <div class="alert alert-success"><%= notice %></div>
-<% end %>
 
 <div class="d-flex justify-content-between align-items-center mb-3">
   <h1>企業一覧</h1>
-      <% if current_user&.admin? %>
+  <% if current_user&.admin? %>
     <%= link_to "＋ 新規企業", new_company_path, class: "btn btn-success" %>
   <% end %>
 </div>
@@ -26,7 +21,6 @@
 
 <div class="row">
   <% @companies.each do |company| %>
-   
     <div class="col-md-6 mb-3">
       <div class="card h-100">
         <div class="card-body">

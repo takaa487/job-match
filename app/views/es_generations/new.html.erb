@@ -32,7 +32,13 @@
             </ul>
           <% end %>
 
-          <p class="text-muted small mb-0">AIがWebで調べた内容をもとにした下書きです。事実と違うところがないか、必ず自分で確認してください。</p>
+          <p class="text-muted small">AIがWebで調べた内容をもとにした下書きです。事実と違うところがないか、必ず自分で確認してください。</p>
+
+          <%= form_with model: @es_draft do |f| %>
+            <%= f.hidden_field :company_name %>
+            <%= f.hidden_field :content %>
+            <%= f.submit "このESを保存", class: "btn btn-outline-primary btn-sm" %>
+          <% end %>
         </div>
       </div>
     <% end %>

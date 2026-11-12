@@ -8,7 +8,8 @@
   <% @es_drafts.each do |draft| %>
     <div class="card mb-3">
       <div class="card-body">
-        <h5 class="card-title"><%= draft.company_name %></h5>
+        <%# 登録済みの企業の ES だけ、企業のページへのリンクにする %>
+        <h5 class="card-title"><%= link_to_if draft.company, draft.company_name, draft.company %></h5>
         <p class="text-muted mb-2"><small><%= draft.created_at.strftime("%Y/%m/%d %H:%M") %> 保存</small></p>
         <div class="border rounded p-3 bg-light" style="white-space: pre-wrap;"><%= draft.content %></div>
         <%= button_to "削除", es_draft_path(draft), method: :delete, class: "btn btn-outline-danger btn-sm mt-2", form: { class: "d-inline" }, data: { turbo_confirm: "このESを削除しますか？" } %>

@@ -14,11 +14,6 @@ class Claude
   NETWORK_ERRORS = [ Net::OpenTimeout, Net::ReadTimeout, SocketError, SystemCallError, IOError, OpenSSL::SSL::SSLError ].freeze
 
   class << self
-    def generate(prompt)
-      data = post(model: MODEL, max_tokens: 1024, messages: [ { role: "user", content: prompt } ])
-      data.dig("content", 0, "text") || raise(Error, "返事に文章がありません")
-    end
-
     # { text: 文章, sources: 文章の中で引用された出典, searched_urls: 検索で実際に見たページの URL } を返す
     def generate_with_search(prompt, max_searches: 3)
       data = post(

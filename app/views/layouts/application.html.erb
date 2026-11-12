@@ -52,7 +52,9 @@
       <% unless current_page?(root_path) %>
         <a href="<%= root_path %>" class="d-inline-block small fw-bold text-decoration-none mb-2" data-turbo="false" onclick="if (history.length > 1) { history.back(); return false; }">← 戻る</a>
       <% end %>
-
+      <% if notice %>
+        <div class="alert alert-success"><%= notice %></div>
+      <% end %>
       <% if alert %>
         <div class="alert alert-warning"><%= alert %></div>
       <% end %>

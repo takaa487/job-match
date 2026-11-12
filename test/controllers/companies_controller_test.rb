@@ -43,7 +43,13 @@ class CompaniesControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, companies(:tech).name
     assert_not_includes response.body, companies(:bank).name
   end
+  test "企業のページから、企業名を入れた状態でES作成の画面へ移れる" do
+    sign_in users(:user)
 
+    get company_url(companies(:tech))
+
+    assert_select "a[href=?]", new_es_generation_path(company_name: "サンプルソフト")
+  end
   test "管理者でなければ、企業を登録できない" do
     sign_in users(:user)
 
